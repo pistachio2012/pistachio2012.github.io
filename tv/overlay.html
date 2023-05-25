@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script>
+    var retryTimes = 0;
+    var ws = null;
+    var handlers = {
+      login: (data) => {
+        console.log(data.result);
+      }
+    }
+
+    function onopen() {
+      retryTimes = 0;
+      console.log("连接已建立...");
+      showMessage("已连接到服务器...", 5)
+      let msg = {
+        type: "login",
+        userid: overlay.getUserID()
+      }
+      sendMessage(msg)
+    }
+    function onmessage(evt) {
+      console.log("接收到信息:" + evt.data);
+      var received_msg = JSON.parse(evt.data);
+      if (received_msg.type == undefined || handlers[received_msg.type] == undefined)
+        console.log("接收到无效信息:" + evt.data);
+      else
+        handlers[received_msg.type](received_msg);
+    };
+    function onclose () {
+      console.log("连接已关闭...");
+      showMessage("连接出错，请确认网络连接情况。\n正在第" + retryTimes + "次重试。。。", 0);
+      initWS();
+    };
+    function onerror () {
+      console.log("连接出错...");
+    };
+
+    function initWS() {
+      retryTimes++;
+      ws = new WebSocket("wss://ws.ranpeng.cf");
+      ws.onopen = onopen;
+      ws.onmessage = onmessage;
+      ws.onclose = onclose;
+      ws.onerror = onerror;
+    }
+
+    function sendMessage(msg) {
+      let data = JSON.stringify(msg);
+      console.log("发送数据:"+data);
+      ws.send(data);
+    }
+
+    function showMessage(msg, time) {
+      var msgDiv = document.getElementById('message');
+      msgDiv.style.display = 'block';
+      msgDiv.innerText = msg;
+      if (time > 0) {
+        setTimeout(()=>msgDiv.style.display='none', time * 1000);
+      }
+    }
+
+    function init() {
+      showMessage("网络初始化中...");
+      initWS();
+    }
+  </script>
+  <style>
+    #message {
+      background-color: #0000AA88;
+      border-radius: 15px;
+      padding: 10px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      margin: auto;
+      width: 50%;
+      height: auto;
+      font-size: 33px;
+    }
+  </style>
+</head>
+<body bgcolor='transparent' onload='init()'>
+  <div style='display:none' id='message'></div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="page-view-size" content="1280*720"></meta>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+</head>
+<body bgcolor='transparent'>
+  <video loop autoplay controls></video>
+  <script>
+var playlist = [
+/*cctv1 */ "http://39.134.115.163:8080/PLTV/88888910/224/3221225618/index.m3u8"
+/*cctv2 */,"http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/cctv2/1300000/mnf.m3u8"
+/*cctv3 */,"http://39.134.115.163:8080/PLTV/88888910/224/3221225647/index.m3u8"
+/*cctv4 */,"http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/cctv4/1300000/mnf.m3u8"
+/*cctv5 */,"http://39.134.115.163:8080/PLTV/88888910/224/3221225633/index.m3u8"
+/*cctv5+*/,"http://39.134.115.163:8080/PLTV/88888910/224/3221225706/index.m3u8"
+/*cctv6 */,"http://39.134.115.163:8080/PLTV/88888910/224/3221225650/index.m3u8"
+/*cctv7 */,"http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/cctv7/1300000/mnf.m3u8"
+/*cctv8 */,"http://183.251.61.235/PLTV/88888888/224/3221227174/index.m3u8"
+/*cctv9 */,"http://39.134.115.163:8080/PLTV/88888910/224/3221225646/index.m3u8"
+/*cctv10*/,"http://ottrrs.hl.chinamobile.com/PLTV/88888888/224/3221225730/index.m3u8"
+/*cctv11*/,"http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/cctv11/1300000/mnf.m3u8"
+/*cctv12*/,"http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/cctv12/1300000/mnf.m3u8"
+/*cctv13*/,"http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/cctvxw/1300000/mnf.m3u8"
+/*cctv14*/,"http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/cctvse/1300000/mnf.m3u8"
+/*cctv15*/,"http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/cctvyy/1300000/mnf.m3u8"
+/*hunan */,"http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/hnwshd/4000000/mnf.m3u8"
+/*zhejia*/,"http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/zjwshd/4000000/mnf.m3u8"
+/*shangh*/,"http://219.151.31.38/liveplay-kk.rtxapp.com/live/program/live/hddfws/2300000/mnf.m3u8"
+];
+var video = document.getElementsByTagName("video")[0];
+var index = 0, last = playlist.length - 1; 
+console.log("play list length:" + last);
+video.src = playlist[index];
+document.onkeydown = function(evt) {
+  console.log("keyCode:" + evt.keyCode);
+  switch(evt.keyCode) {
+    case 40:
+      index++;
+      if (index > last)
+        index = 0;
+      video.src = playlist[index];
+      break;
+    case 38:
+      index--;
+      if (index < 0)
+        index = last;
+      video.src = playlist[index];
+      break;
+    default:
+      console.log("unhandle keyCode:" + evt.keyCode);
+  }
+};
+  </script>
+</body>
+</html>

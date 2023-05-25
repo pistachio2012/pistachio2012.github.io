@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Chromium浏览器的定制与优化，及二次开发">
+  <meta name="keywords" content="Chromium 浏览器 定制 优化 二次开发">
+  <meta name="author" content="pistachio2012@126.com">
+  <meta name="robots" content="index, follow">
+  <title>Chromium定制及二次开发</title>
+</head>
+<body>
+  <h1>Chromium定制及二次开发:添加自定义的WebView接口和demo代码</h1>
+<h2 id="-">目的</h2>
+<p>Chromium源码有多层，chrome，webview层实际上都是调用的content层，因此直接在content层对外提供自定义WebView接口，就能即简单又可控地提供浏览器功能。</p>
+<h2 id="-shell-shellmanager">修改Shell和ShellManager</h2>
+<p>content层有一个比较薄的用于测试的shell封装，直接修改这层封装就可以将浏览器改成想要的样子。在Android上对外是java接口，因此shell封装有java和jni两部分实现，修改也分这两部分，java主要是改界面，将界面修改成需要的模样，比如网页全屏，jni主要是增加需要的接口，用于配置浏览器。</p>
+<h2 id="-webview-">增加WebView接口</h2>
+<p>增加java的WebView类，用于对外提供接口，主要是初始化，配置和加载接口等，WebView实现主要是调用Shell和ShellManager。</p>
+<h2 id="-aar">打包成aar</h2>
+<p>这个主要是so和class打包后能够更方便地提供给第三方进行集成。这部分主要是修改gn文件，添加一个target，依赖so和class。</p>
+</body>
+</html>
+

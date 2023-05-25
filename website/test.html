@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Chromium浏览器的定制与优化，及二次开发">
+  <meta name="keywords" content="Chromium 浏览器 定制 优化 二次开发">
+  <meta name="author" content="pistachio2012@126.com">
+  <meta name="robots" content="index, follow">
+  <title>Chromium定制及二次开发</title>
+</head>
+<body>
+  <h1>Chromium定制及二次开发:删除test相关的代码</h1>
+  <h2 id="-test-">删除test相关文件</h2>
+<h3 id="-">通过文件名查找并删除</h3>
+<p>fdfind -E&quot;<em>hit_test</em>&quot; test | xargs rm -rf
+这个命令能够删除文件名中带test的文件，除了hit_test，主要包括unittest,browsertest,Test等。</p>
+<h3 id="testing-">testing目录</h3>
+<p>有些文件如果删除，那么需要修改的源文件会很多，因此这些文件要保留，但是需要做些空白修改。
+如testing目录下的test.gni，fuzzer_test.gni，gtest_prod.h等</p>
+<h2 id="-gn-">修改gn文件</h2>
+<p>删除test文件后，在gn文件中依然会有这些文件的引用，在gen时会报错，找不到文件。</p>
+<h3 id="target-test">target中含有test</h3>
+<p>在引用test相关文件的target都会在名字中包含test，因此只需修改target，将其写空就不会用到test文件的引用了，如</p>
+<pre><code><span class="hljs-function"><span class="hljs-title">template</span><span class="hljs-params">(<span class="hljs-string">"static_library"</span>)</span> {
+  <span class="hljs-title">if</span> <span class="hljs-params">(filter_exclude([ target_name ], [ <span class="hljs-string">"*test*"</span>, <span class="hljs-string">"*mock*"</span> ]) == [])</span> {
+    <span class="hljs-title">not_needed</span><span class="hljs-params">(invoker, <span class="hljs-string">"*"</span>, TESTONLY_AND_VISIBILITY)</span>
+    <span class="hljs-title">not_needed</span><span class="hljs-params">(invoker, TESTONLY_AND_VISIBILITY)</span>
+    <span class="hljs-title">group</span><span class="hljs-params">(target_name)</span> {}
+  } <span class="hljs-title">else</span> {
+    <span class="hljs-title">static_library</span><span class="hljs-params">(target_name)</span> {
+      <span class="hljs-title">forward_variables_from</span><span class="hljs-params">(invoker, <span class="hljs-string">"*"</span>, TESTONLY_AND_VISIBILITY)</span>
+      <span class="hljs-title">forward_variables_from</span><span class="hljs-params">(invoker, TESTONLY_AND_VISIBILITY)</span>
+    }
+  }
+}</span>
+</code></pre><p>但是会有几个target改不了，比如copy，这比较少可以在对应的gn文件中直接改。</p>
+<h3 id="-mojo-test">修改mojo文件中的test</h3>
+<p>mojo文件中会有test相关的接口，这些接口有的会用到相应的test.mojo文件，因此要注释这些文件中对test.mojo文件的引用，并且将对应的test接口注释就可以了。注释方法也很简单，和c注释是一样的。</p>
+<h3 id="-python-">修改python文件</h3>
+<p>Chromium中有些文件是通过python生成的，比如idl文件，在生成文件中会有test相关文件引用和调用，也会在生成源码文件同时生成其对应的test文件，因此只需修改python文件中test相关的引用和生成就可以了。</p>
+<h3 id="-tmpl-">修改tmpl文件</h3>
+<p>tmpl文件是生成源码用的模板文件，如果在模板文件中包含了test相关的引用和调用，那么就会在生成文件有test代码，因此需要注释tmpl文件中test相关的引用和调用。</p>
+</body>
+</html>
+

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Chromium浏览器的定制与优化，及二次开发">
+  <meta name="keywords" content="Chromium 浏览器 定制 优化 二次开发">
+  <meta name="author" content="pistachio2012@126.com">
+  <meta name="robots" content="index, follow">
+  <title>Chromium定制及二次开发</title>
+</head>
+<body>
+  <h1>Chromium定制及二次开发:删除accessibility功能</h1>
+<h2 id="-">目的</h2>
+<p>因为要在特定的环境下使用定制的Chromium，所以accessibility的功能是不会用到的，因此在开发时将其删除。</p>
+<h2 id="-">步骤</h2>
+<h3 id="-blink-accessibility-">删除blink中accessibility相关</h3>
+<p>删除accessibility目录，注释gn文件中accessibility文件，删除accessibility相关的mojo文件，
+最主要是在一些用到accessibility的源码中注释accessibility相关的调用</p>
+<h3 id="-content-accessibility-">删除content中accessibility相关</h3>
+<p>删除accessibility目录，注释gn文件中accessibility文件，最主要是在一些用到accessibility的源码中注释accessibility相关的调用</p>
+</body>
+</html>
+
