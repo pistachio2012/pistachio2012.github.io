@@ -1,0 +1,7 @@
+[submodule "home/themes/luna"]
+	path = home/themes/luna
+	url = https://github.com/Ice-Hazymoon/hugo-theme-luna
+	branch = master
+[submodule "home/themes/blist"]
+	path = home/themes/blist
+	url = https://github.com/apvarun/blist-hugo-theme.git
